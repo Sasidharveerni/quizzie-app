@@ -1,0 +1,19 @@
+.signup-header {
+    background-color: #F2F2F2;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.signup-header-1 {
+    background-color: #ffffff;
+    width: 80vw;
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: #000000 25%;
+}
