@@ -32,27 +32,47 @@ router.get('/get/quiz/:quizId', async (req, res) => {
 
 router.get('/get/all-quiz/:userId', async (req, res) => {
     try {
-        const {userId} = req.params;
-        const quizData = await QuizSec.find({creator: userId});
-        if(quizData) {
+        const { userId } = req.params;
+        const quizData = await QuizSec.findOne({ creator: userId });
+
+        if (quizData) {
+            // Count the total number of quizzes
+            const totalQuiz = quizData.quizCollections.length;
+
+            // Calculate the total number of questions across all quizzes
+            const totalQuestions = quizData.quizCollections.reduce((total, quiz) => {
+                return total + quiz.questions.length;
+            }, 0);
+
+            // Calculate the total number of views/impressions across all quizzes
+            const totalImpressions = quizData.quizCollections.reduce((total, quiz) => {
+                return total + quiz.questions.reduce((impressionTotal, question) => {
+                    return impressionTotal + question.views;
+                }, 0);
+            }, 0);
+
             res.status(200).json({
                 status: 'Success',
                 message: 'Quiz data: ',
-                quiz: quizData
-            })
+                quizCollections: quizData.quizCollections,
+                quizCnt: totalQuiz,
+                quizQues: totalQuestions,
+                quizViews: totalImpressions
+            });
         } else {
             res.status(404).json({
                 status: 'Failed',
                 message: 'There is no valid quiz'
-            })
+            });
         }
     } catch (error) {
         res.status(500).json({
             status: 'Failed',
-            error: error
-        })
+            error: error.message
+        });
     }
 });
+
 
 router.post('/create/quiz/:creatorId', async (req, res) => {
     try {

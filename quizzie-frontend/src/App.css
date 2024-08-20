@@ -160,3 +160,75 @@
     text-align: center;
   }
   
+  .grid-quiz {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+
+
+
+
+
+
+
+  .quiz-table-container {
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  .quiz-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #D1E1FF;
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  .quiz-table th,
+  .quiz-table td {
+    padding: 0.75rem;
+    text-align: center;
+  }
+  
+  .quiz-table th {
+    background-color: #5076FF; 
+    color: #FFF;
+  }
+  
+  .quiz-table tbody tr {
+    background-color: #F2F2F2; /* light blue for rows */
+    border-radius: 5px;
+  }
+  
+  .quiz-table tbody tr:nth-child(even) {
+    background-color: #B3C4FF; /* alternate row color */
+    border-radius: 5px;
+  }
+  
+  .actions {
+    display: flex;
+    align-items: center;
+  }
+  
+  .action-button {
+    background: none;
+    border: none;
+    margin-right: 0.5rem;
+    cursor: pointer;
+  }
+  
+  .action-button svg {
+    fill: currentColor;
+  }
+  
+  .analysis-link {
+    color: #466BF3;
+    text-decoration: none;
+  }
+  
+  .analysis-link:hover {
+    text-decoration: underline;
+  }
+  

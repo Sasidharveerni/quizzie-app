@@ -1,9 +1,10 @@
 import React from 'react'
+import QuizTable from './QuizTable'
 
-function Analytics() {
+function Analytics({quizCollections}) {
   return (
     <div>
-        
+        <QuizTable quizCollections={quizCollections}/>
     </div>
   )
 }

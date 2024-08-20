@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import '../App.css';
 import showToasts from './Toast';
 
-function LoginSignup() {
+function LoginSignup({setCreatorData}) {
 
     const navigate = useNavigate();
     const [click, setClick] = useState({
@@ -61,18 +61,31 @@ function LoginSignup() {
     
         return valid;
     };
+
+    const loginValidation = () => {
+        let valid = true;
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(loginData.email)) {
+            setErrors(prevErrors => ({ ...prevErrors, email: true }));
+            valid = false;
+        }
+        return valid;
+    }
     
 
     const register = async () => {
         if (validation()) {
             try {
-                const response = await axios.post('http:/localhost:5000/register', {
+                const response = await axios.post('http://localhost:5000/register', {
                     username: userData.username,
                     email: userData.email,
                     password: userData.password
                 });
                 if (response.data.status === 'Success') {
+                    localStorage.setItem('quizzieEmail', userData.email);
+                    localStorage.setItem('quizzieToken', response.data.token);
                     showToasts(response.data.message, 'success');
+                    setCreatorData(response.data.user)
                     navigate('/dashboard');
                 }
             } catch (error) {
@@ -82,12 +95,36 @@ function LoginSignup() {
         } 
     };
 
+    const login = async () => {
+            if(loginValidation()) {
+                try {
+                    const response = await axios.post('http://localhost:5000/login', {
+                        email: loginData.email,
+                        password: loginData.password
+                    });
+                    if (response.data.status === 'Success') {
+                        localStorage.setItem('quizzieEmail',loginData.email);
+                        localStorage.setItem('quizzieToken',response.data.token);
+                        showToasts(response.data.message, 'success');
+                        setCreatorData(response.data.user);
+                        navigate('/dashboard');
+                    } else {
+                        showToasts(response.data.message, 'error');
+                    }
+                } catch (error) {
+                    showToasts(error, 'error');
+                    console.log(error);
+                }
+            }
+        
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
         if (click.signup) {
             register();
         } else {
-            // Handle login logic here
+            login();
         }
     };
 

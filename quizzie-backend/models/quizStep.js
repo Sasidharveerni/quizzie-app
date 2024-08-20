@@ -78,6 +78,7 @@ const quizSchema = new mongoose.Schema({
         enum: ['qna', 'poll'],
         required: true
     },
+    views: { type: Number, default: 0, required: true},
     creator: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     questions: [quizStepSchema],  // Array of questions for each quiz
     createdAt: { type: Date, default: Date.now },
