@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from 'react'
 import DashBoardPage from './DashBoardPage'
 import Analytics from './Analytics';
-import QuizPage from './QuizPage';
 import axios from 'axios';
 import showToasts from './Toast';
+import QuizApp from './QuizApp';
 
 function DashBoard({creatorData}) {
   const [clickedPage, setClickedPage] = useState({
@@ -80,7 +80,7 @@ function DashBoard({creatorData}) {
 
           {clickedPage.analytics && <Analytics quizCollections={quizCollections}/>}
 
-          {clickedPage.createQuiz && <QuizPage />}
+          {clickedPage.createQuiz && <QuizApp/>}
 
        </div>
     </div>

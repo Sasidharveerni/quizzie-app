@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../App.css';
 
-function QuizPage() {
+function QuizPage({onSelectQuizType}) {
   const [showModal, setShowModal] = useState(true); // Initially set to true to display modal on load
 
   const handleCloseModal = () => {
@@ -10,6 +10,7 @@ function QuizPage() {
 
   const handleQuizTypeSelection = (type) => {
     // Handle quiz type selection logic here
+    onSelectQuizType(type)
     console.log(`Selected quiz type: ${type}`);
   };
 
