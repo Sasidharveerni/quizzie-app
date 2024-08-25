@@ -78,8 +78,7 @@ router.post('/create/quiz/:creatorId', async (req, res) => {
     try {
         const { creatorId } = req.params;
         const { quizName, quizType, questions } = req.body;
-        console.log(questions);
-        console.log(typeof(questions))
+        console.log('Received quiz data:', JSON.stringify({ quizName, quizType, questions }, null, 2));
 
         // Check if `questions` is an array
         if (!Array.isArray(questions) || questions.length === 0) {
@@ -89,12 +88,19 @@ router.post('/create/quiz/:creatorId', async (req, res) => {
             });
         }
 
+        if(quizType !== 'poll') {
+
+            questions.forEach((question, index) => {
+                console.log(`Checking question ${index + 1}:`, JSON.stringify(question, null, 2));
+    
+                if (!question.question || !question.optionType || !question.options || !question.correctAns) {
+                    console.error('Error in question:', JSON.stringify(question, null, 2));
+                    throw new Error('Each question must include `question`, `optionType`, `options`, and `correctAns` fields');
+                }
+            });
+        }
+
         // Check the structure of each question
-        questions.forEach(question => {
-            if (!question.question || !question.optionType || !question.options || !question.correctAns) {
-                throw new Error('Each question must include `question`, `optionType`, `options`, and `correctAns` fields');
-            }
-        });
 
         const parsedQuestions = questions.map(question => {
             return {
@@ -145,6 +151,7 @@ router.post('/create/quiz/:creatorId', async (req, res) => {
         // Respond with success
         res.status(200).json({
             status: 'Success',
+            quizId: newQuiz._id,
             data: quizSec,
             userData: updatedUser
         });
@@ -156,6 +163,30 @@ router.post('/create/quiz/:creatorId', async (req, res) => {
         });
     }
 });
+
+router.delete('/delete/quiz/:quizId', async (req, res) => {
+    try {
+        const { quizId } = req.params;
+        const quizData = await Quiz.findByIdAndDelete(quizId);
+
+        if(!quizData) {
+            return res.status(404).json({
+                status: 'Failed',
+                message: 'No quiz data is found'
+            })
+        } 
+        res.status(200).json({
+            status: 'Success',
+            message: 'Quiz deleted successfully!',
+            deletedQuiz: quizData
+        })
+    } catch (error) {
+        res.status(500).json({
+            status: 'Failed',
+            error: error.message
+        })
+    }
+})
 
 router.patch('/submit/response/:quizId', async (req, res) => {
     try {

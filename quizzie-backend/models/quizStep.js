@@ -52,7 +52,6 @@ const quizStepSchema = new mongoose.Schema({
     },
     correctAns: {
         type: String,
-        required: true
     },
     timer: {
         type: Number,

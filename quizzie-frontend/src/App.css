@@ -247,6 +247,10 @@
     align-items: center;
     z-index: 1000;
   }
+
+  .modal-body {
+    margin: 2% 5%;
+  }
   
   .modal-content {
     background: white;
@@ -348,10 +352,15 @@
   
   .quiz-input {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
+    padding: 6px;
+    margin-bottom: 5px;
     border-radius: 5px;
     border: 1px solid #ddd;
+  }
+
+  .option-type {
+    display: flex;
+    gap: 0.5vw;
   }
   
   .option-type-buttons {
@@ -369,30 +378,40 @@
   }
   
   .option-input {
+    width: 15vw;
     margin-bottom: 10px;
+  }
+
+  .option-container {
+    text-align: left;
   }
   
   .add-option-button {
-    display: inline-block;
-    background-color: #4caf50;
-    color: white;
+    background-color: #FFFFFF;
+    color: #9F9F9F;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin-bottom: 20px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    float: left;
+    margin: 1% 3%;
   }
   
   .timer-section {
     margin-top: 20px;
+    
+    float: right;
   }
   
   .timer-buttons {
     display: flex;
+    flex-direction: column;
     gap: 10px;
   }
   
   .timer-button {
+    width: 10vw;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
@@ -531,4 +550,26 @@
 
 .question-add:hover {
   background-color: #218838;
+}
+
+
+.delete-button {
+  background-color: #FF4B4B;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  padding: 0.3vw;
+  color: #fff;
+  width: 15vw;
+  cursor: pointer;
+}
+
+.canceled-button {
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  padding: 0.3vw;
+  width: 15vw;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  cursor: pointer;
 }

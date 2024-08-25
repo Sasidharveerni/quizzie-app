@@ -4,7 +4,7 @@ import editIcon  from './vectors/Vector.png';
 import  deleteIcon  from './vectors/Vector (1).png';
 import  shareIcon  from './vectors/Vector (2).png'
 
-const QuizTable = ({quizCollections}) => {
+const QuizTable = ({quizCollections, setDeleteModal, setQuizId}) => {
 
   const [updateScreen, setUpdateScreen] = useState(false);
 
@@ -61,7 +61,7 @@ const QuizTable = ({quizCollections}) => {
                       <img src={editIcon} alt='' />
                     
                   </button>
-                  <button className="action-button delete">
+                  <button className="action-button delete" onClick={() => {setDeleteModal(true); setQuizId(ele._id)}}>
                        <img src={deleteIcon} alt='' />
                     
                   </button>

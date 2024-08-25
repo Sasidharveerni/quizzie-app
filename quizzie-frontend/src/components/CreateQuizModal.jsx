@@ -1,8 +1,20 @@
 import React, { useState } from 'react';
 import '../App.css';
+import DeleteIcon from './vectors/Vector (1).png';
+import axios from 'axios';
+import showToasts from './Toast';
 
-function CreateQuizModal({ quizType, onClose }) {
-  const [questions, setQuestions] = useState([{ question: '', options: [''], timer: 'off', optionType: 'image' }]);
+function CreateQuizModal({ quizType, onClose, quizName, setIsPublishedModalOpen, setPublishedLink }) {
+  const [questions, setQuestions] = useState([
+    {
+      question: '',
+      options: [{ text: '' }, { text: '' }], // Start with two options
+      timer: 'off',
+      optionType: 'text',
+      correctAns: null, // Initialize to null
+    },
+  ]);
+  const userId = localStorage.getItem('quizzieCreatorId') || '';
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
   const handleInputChange = (e) => {
@@ -17,21 +29,44 @@ function CreateQuizModal({ quizType, onClose }) {
   const handleAddOption = () => {
     const newQuestions = [...questions];
     if (newQuestions[currentQuestionIndex].options.length < 4) {
-      newQuestions[currentQuestionIndex].options.push('');
+      newQuestions[currentQuestionIndex].options.push(
+        newQuestions[currentQuestionIndex].optionType === 'text'
+          ? { text: '' }
+          : newQuestions[currentQuestionIndex].optionType === 'image'
+            ? { image: '' }
+            : { text: '', image: '' }
+      );
       setQuestions(newQuestions);
     }
   };
 
-  const handleOptionChange = (optionIndex, value) => {
+  const handleRemoveOption = (optionIndex) => {
     const newQuestions = [...questions];
-    newQuestions[currentQuestionIndex].options[optionIndex] = value;
+    if (newQuestions[currentQuestionIndex].options.length > 2) {
+      newQuestions[currentQuestionIndex].options.splice(optionIndex, 1);
+      setQuestions(newQuestions);
+    }
+  };
+
+  const handleOptionChange = (optionIndex, key, value) => {
+    const newQuestions = [...questions];
+    newQuestions[currentQuestionIndex].options[optionIndex][key] = value;
     setQuestions(newQuestions);
   };
 
   const handleAddQuestion = () => {
     if (questions.length < 5) {
-      setQuestions([...questions, { question: '', options: [''], timer: 'off', optionType: 'image' }]);
-      setCurrentQuestionIndex(questions.length); // Move to the newly added question
+      setQuestions([
+        ...questions,
+        {
+          question: '',
+          options: [{ text: '' }, { text: '' }], // Start with two options
+          timer: 'off',
+          optionType: 'text',
+          correctAns: null,
+        },
+      ]);
+      setCurrentQuestionIndex(questions.length);
     }
   };
 
@@ -50,31 +85,77 @@ function CreateQuizModal({ quizType, onClose }) {
   const handleOptionTypeChange = (value) => {
     const newQuestions = [...questions];
     newQuestions[currentQuestionIndex].optionType = value;
+
+    newQuestions[currentQuestionIndex].options = value === 'text'
+      ? [{ text: '' }, { text: '' }] // Always start with two options
+      : value === 'image'
+        ? [{ image: '' }, { image: '' }]
+        : [{ text: '', image: '' }, { text: '', image: '' }];
+
     setQuestions(newQuestions);
   };
 
-  const handleSubmit = () => {
+  const handleCorrectAnswerChange = (index, value) => {
+    const newQuestions = [...questions];
+    if (value !== undefined) {
+      newQuestions[currentQuestionIndex].correctAns = value;
+    } else {
+      newQuestions[currentQuestionIndex].correctAns = null;
+    }
+    setQuestions(newQuestions);
+  };
+
+  const handleSubmit = async () => {
     const quizData = {
-      quizName: 'Quiz Example',
+      quizName: quizName,
       quizType: quizType,
-      questions: questions.map((q) => ({
-        ...q,
-        views: 0,
-      })),
+      questions: questions.map((q) => {
+        const questionData = {
+          question: q.question,
+          options: q.options,
+          timer: q.timer,
+          optionType: q.optionType,
+          views: 0,
+        };
+
+        if (q.correctAns !== null) {
+          questionData.correctAns = q.correctAns;
+        }
+
+        return questionData;
+      }),
     };
+
     console.log('Quiz Data:', quizData);
-    // Here, you would send `quizData` to your API endpoint
+
+    try {
+      const response = await axios.post(`http://localhost:5000/create/quiz/${userId}`, quizData);
+      console.log(response);
+
+      if (response.data.status === 'Success') {
+        setIsPublishedModalOpen(true);
+        setPublishedLink(`http://localhost:5000/${response.data.quizId}`)
+        showToasts('Quiz created successfully', 'success');
+      }
+    } catch (error) {
+      showToasts(error.response.data.message, 'error');
+      console.log(error);
+    }
+
     onClose();
   };
+
+  if (!userId) {
+    return (
+      <div>
+        <p>Please login to create quiz</p>
+      </div>
+    );
+  }
 
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <div className="modal-header">
-          <h2>Create {quizType} Quiz</h2>
-          <button className="close-button" onClick={onClose}>&times;</button>
-        </div>
-
         <div className="modal-body">
           <div className="question-nav">
             {questions.map((_, index) => (
@@ -141,14 +222,35 @@ function CreateQuizModal({ quizType, onClose }) {
             </div>
 
             {questions[currentQuestionIndex].options.map((option, optionIndex) => (
-              <input
-                key={optionIndex}
-                type="text"
-                value={option}
-                onChange={(e) => handleOptionChange(optionIndex, e.target.value)}
-                placeholder={`Option ${optionIndex + 1}`}
-                className="quiz-input option-input"
-              />
+              <div key={optionIndex} className="option-container">
+                <input
+                  type="radio"
+                  name={`correctAns-${currentQuestionIndex}`}
+                  checked={questions[currentQuestionIndex].correctAns === (option.text || option.image)}
+                  onChange={() => handleCorrectAnswerChange(optionIndex, option.text || option.image)}
+                />
+                {questions[currentQuestionIndex].optionType !== 'image' && (
+                  <input
+                    type="text"
+                    value={option.text || ''}
+                    onChange={(e) => handleOptionChange(optionIndex, 'text', e.target.value)}
+                    placeholder={`Option ${optionIndex + 1} Text`}
+                    className="quiz-input option-input"
+                  />
+                )}
+                {questions[currentQuestionIndex].optionType !== 'text' && (
+                  <input
+                    type="text"
+                    value={option.image || ''}
+                    onChange={(e) => handleOptionChange(optionIndex, 'image', e.target.value)}
+                    placeholder={`Option ${optionIndex + 1} Image URL`}
+                    className="quiz-input option-input"
+                  />
+                )}
+                {questions[currentQuestionIndex].options.length > 2 && optionIndex > 1 && (
+                  <img src={DeleteIcon} alt='' className="delete-icon" onClick={() => handleRemoveOption(optionIndex)} />
+                )}
+              </div>
             ))}
 
             {questions[currentQuestionIndex].options.length < 4 && (
@@ -162,7 +264,7 @@ function CreateQuizModal({ quizType, onClose }) {
           </div>
 
           <div className="timer-section">
-            <label>Timer</label>
+            <p>Timer</p>
             <div className="timer-buttons">
               <button
                 className={`timer-button ${questions[currentQuestionIndex].timer === 'off' ? 'active' : ''}`}
@@ -187,7 +289,7 @@ function CreateQuizModal({ quizType, onClose }) {
         </div>
 
         <div className="modal-footer">
-          <button onClick={onClose} className="cancel-button">Cancel</button>
+          <button onClick={onClose} className="cancel-button">Close</button>
           <button onClick={handleSubmit} className="create-button">Create Quiz</button>
         </div>
       </div>
