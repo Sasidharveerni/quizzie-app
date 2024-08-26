@@ -4,7 +4,7 @@ function DashBoardPage({quizData, quizCollections}) {
   if(!quizCollections || !quizData) {
     return (
       <div>
-        Nothing
+        Please create a quiz to see dashboard
       </div>
     )
   }

@@ -5,8 +5,11 @@ import Analytics from './Analytics';
 import axios from 'axios';
 import showToasts from './Toast';
 import QuizApp from './QuizApp';
+import { useNavigate } from 'react-router';
 
 function DashBoard({creatorData}) {
+
+  const navigate = useNavigate();
   const [clickedPage, setClickedPage] = useState({
     dashboard: true,
     analytics: false,
@@ -34,9 +37,16 @@ function DashBoard({creatorData}) {
         setQuizCollections(response.data.quizCollections);
       }
      } catch (error) {
-        showToasts(error.message, 'error');
         console.log(error);
      }
+  }
+
+  const logOutUser = () => {
+    showToasts('Logged out successfully', 'success');
+    localStorage.removeItem('quizzieEmail');
+    localStorage.removeItem('quizzieToken');
+    localStorage.removeItem('quizzieCreatorId');
+    navigate('/');
   }
 
   if(!creatorData) {
@@ -70,7 +80,7 @@ function DashBoard({creatorData}) {
 
           <div>
             <hr />
-            <div>
+            <div style={{cursor: 'pointer'}} onClick={() => logOutUser()}>
                 Logout
             </div>
           </div>

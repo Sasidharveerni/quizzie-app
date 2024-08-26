@@ -11,6 +11,7 @@ function DeleteQuiz({ handledeleteModalClose, quizId}) {
             showToasts('Quiz deleted successfully', 'success');
            }
         } catch (error) {
+            showToasts(error.response.data.message, 'error')
             console.log(error)
         }
         handledeleteModalClose();

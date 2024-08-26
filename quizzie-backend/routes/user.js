@@ -43,38 +43,47 @@ router.post('/login', async(req, res) => {
     }
 })
 
-router.post('/register',validateUser, async (req, res) => {
+router.post('/register', validateUser, async (req, res) => {
     try {
         const { username, email, password } = req.body;
-        const existingUser = await user.findOne({ email: email })
+        const existingUser = await user.findOne({ email: email });
+
         if (existingUser) {
-            return res.status(501).json({
+            return res.status(409).json({
                 status: 'Failed',
                 message: 'User already exists!'
-            })
-        }
-        else {
+            });
+        } else {
             const hashedPassword = await bcrypt.hash(password, 5);
             const newUser = new user({
                 username,
                 email,
                 password: hashedPassword,
-            })
+            });
 
-            await newUser.save();   // handle the case where users with same email-id should not be able register again
+            await newUser.save();
+
+            // Generate a token (assuming you're using JWT)
+            const token = jwt.sign(
+                { userId: newUser._id, email: newUser.email },
+                'secretkey', // Use your secret key from the environment variables
+                { expiresIn: '2d' } // Token expiration time
+            );
+
             return res.status(201).json({
                 status: 'Success',
                 message: 'User registered successfully',
-                user: newUser
-            })
+                user: newUser,
+                token: token // Send the token to the client
+            });
         }
     } catch (error) {
-        res.status(501).json({
+        res.status(500).json({
             message: 'Something went wrong',
-            err: error
-        })
+            error: error.message
+        });
     }
-})
+});
 
 
 router.patch('/update/:userId', verifyToken, async (req, res) => {

@@ -1,7 +1,6 @@
 const express = require('express');
 const user = require('../models/user');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 const { Quiz, QuizSec } = require('../models/quizStep');
 
 const router = express.Router();
@@ -166,27 +165,48 @@ router.post('/create/quiz/:creatorId', async (req, res) => {
 
 router.delete('/delete/quiz/:quizId', async (req, res) => {
     try {
-        const { quizId } = req.params;
-        const quizData = await Quiz.findByIdAndDelete(quizId);
-
-        if(!quizData) {
-            return res.status(404).json({
-                status: 'Failed',
-                message: 'No quiz data is found'
-            })
-        } 
-        res.status(200).json({
-            status: 'Success',
-            message: 'Quiz deleted successfully!',
-            deletedQuiz: quizData
-        })
+      const { quizId } = req.params;
+      const userId = req.body.userId; // Assuming userId is sent in the request body
+  
+      if (!userId) {
+        return res.status(400).json({ message: 'User ID is required' });
+      }
+  
+      if (!mongoose.Types.ObjectId.isValid(quizId)) {
+        return res.status(400).json({ message: 'Invalid quiz ID' });
+      }
+  
+      // Find the QuizSec document for the user
+      const quizSec = await QuizSec.findOne({ creator: userId });
+  
+      if (!quizSec) {
+        return res.status(404).json({ status: 'Failed', message: 'QuizSec not found for this user' });
+      }
+  
+      // Find the index of the quiz to be deleted
+      const quizIndex = quizSec.quizCollections.findIndex(quiz => quiz._id.toString() === quizId);
+  
+      if (quizIndex === -1) {
+        return res.status(404).json({ status: 'Failed', message: 'Quiz not found' });
+      }
+  
+      // Remove the quiz from the quizCollections array
+      quizSec.quizCollections.splice(quizIndex, 1);
+  
+      // Save the updated QuizSec document
+      await quizSec.save();
+  
+      // Remove the quiz reference from the user document
+      await user.findByIdAndUpdate(userId, { $pull: { quizzes: quizId } });
+  
+      res.status(200).json({ status: 'success', message: 'Quiz deleted successfully' });
     } catch (error) {
-        res.status(500).json({
-            status: 'Failed',
-            error: error.message
-        })
+      console.error('Error deleting quiz:', error);
+      res.status(500).json({ message: 'Internal server error' });
     }
-})
+  });
+
+
 
 router.patch('/submit/response/:quizId', async (req, res) => {
     try {

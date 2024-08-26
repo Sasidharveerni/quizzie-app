@@ -6,6 +6,7 @@ import DashBoard from './components/DashBoard';
 import { ToastContainer } from 'react-toastify';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import ResultPage from './components/ResultPage';
 
 function App() {
   const email = localStorage.getItem('quizzieEmail') || '';
@@ -54,6 +55,7 @@ function App() {
          <Routes>
            <Route path='/' element={<LoginSignup setCreatorData={setCreatorData}/>} />
            <Route path='/dashboard' element={<DashBoard creatorData={creatorData} />} />
+           <Route path='/submit/:quizId' element={<ResultPage />} />
           </Routes>
       </BrowserRouter>
    

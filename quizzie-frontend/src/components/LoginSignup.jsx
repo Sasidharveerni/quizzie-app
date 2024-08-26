@@ -84,6 +84,7 @@ function LoginSignup({setCreatorData}) {
                 if (response.data.status === 'Success') {
                     localStorage.setItem('quizzieEmail', userData.email);
                     localStorage.setItem('quizzieToken', response.data.token);
+                    localStorage.setItem('quizzieCreatorId', response.data.user._id);
                     showToasts(response.data.message, 'success');
                     setCreatorData(response.data.user)
                     navigate('/dashboard');
@@ -105,6 +106,7 @@ function LoginSignup({setCreatorData}) {
                     if (response.data.status === 'Success') {
                         localStorage.setItem('quizzieEmail',loginData.email);
                         localStorage.setItem('quizzieToken',response.data.token);
+                        localStorage.setItem('quizzieCreatorId', response.data.user._id);
                         showToasts(response.data.message, 'success');
                         setCreatorData(response.data.user);
                         navigate('/dashboard');
