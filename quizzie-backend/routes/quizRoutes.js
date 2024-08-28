@@ -208,50 +208,80 @@ router.delete('/delete/quiz/:quizId', async (req, res) => {
 
 
 
-router.patch('/submit/response/:quizId', async (req, res) => {
+  router.post('/submit/response/:quizId', async (req, res) => {
     try {
         const { quizId } = req.params;
-        const { questionId, selectedOption } = req.body; // `selectedOption` for QnA and Poll
+        const { questionId, selectedOption } = req.body;
 
-        const quizData = await Quiz.findById(quizId);
+        // Increment quiz views
+        const updatedQuizData = await Quiz.findByIdAndUpdate(quizId, {
+            $inc: { views: 1 }
+        }, { new: true });
 
-        if (!quizData) {
+        if (!updatedQuizData) {
             return res.status(404).json({
                 status: 'Failed',
                 message: 'Quiz not found'
             });
         }
 
-        // Find the specific question within the quiz
-        const question = quizData.questions.id(questionId);
+        // Find the index of the question within the questions array
+        const questionIndex = updatedQuizData.questions.findIndex(q => q._id.toString() === questionId);
 
-        if (!question) {
+        if (questionIndex === -1) {
             return res.status(404).json({
                 status: 'Failed',
                 message: 'Question not found'
             });
         }
 
-        if (quizData.quizType === 'qna') {
-            // Handle QnA response
+        // Increment views for the specific question
+        const updatedQuiz = await Quiz.findOneAndUpdate(
+            { _id: quizId, 'questions._id': questionId },
+            { $inc: { 'questions.$.views': 1 } },  // '$' is the positional operator
+            { new: true }
+        );
+
+        if (updatedQuiz.quizType === 'qna') {
+            const question = updatedQuiz.questions[questionIndex];
             if (question.correctAns === selectedOption) {
-                // Increment the corrected count
-                question.responses[0].corrected += 1;
+                if (question.responses.length === 0) {
+                    question.responses.push({ corrected: 1, incorrected: 0 });
+                } else {
+                    question.responses[0].corrected += 1;
+                }
             } else {
-                // Increment the incorrected count
-                question.responses[0].incorrected += 1;
+                if (question.responses.length === 0) {
+                    question.responses.push({ corrected: 0, incorrected: 1 });
+                } else {
+                    question.responses[0].incorrected += 1;
+                }
             }
-        } else if (quizData.quizType === 'poll') {
-            // Handle Poll response
+        } else if (updatedQuiz.quizType === 'poll') {
+            const question = updatedQuiz.questions[questionIndex];
             const optionIndex = question.options.findIndex(opt => opt.text === selectedOption);
 
             if (optionIndex !== -1) {
-                // If the response for this option doesn't exist yet, initialize it
-                if (!question.responses[optionIndex]) {
-                    question.responses[optionIndex] = { selectedCount: 0 };
+                const selectedOptionText = question.options[optionIndex].text;
+
+                let existingResponseIndex = question.responses[0]?.selectedCounts?.findIndex(
+                    option => option.optionText === selectedOptionText
+                );
+
+                if (existingResponseIndex !== -1 && existingResponseIndex !== undefined) {
+                    question.responses[0].selectedCounts[existingResponseIndex].count += 1;
+                } else {
+                    if (question.responses.length === 0) {
+                        question.responses.push({
+                            selectedCounts: [{ optionText: selectedOptionText, count: 1 }]
+                        });
+                    } else {
+                        question.responses[0].selectedCounts.push({
+                            optionText: selectedOptionText,
+                            count: 1
+                        });
+                    }
                 }
-                // Increment the selectedCount for the chosen option
-                question.responses[optionIndex].selectedCounts += 1;
             } else {
                 return res.status(400).json({
                     status: 'Failed',
@@ -265,12 +295,12 @@ router.patch('/submit/response/:quizId', async (req, res) => {
             });
         }
 
-        // Save the quiz after updating the response
-        await quizData.save();
+        // Save the updated quiz data
+        await updatedQuiz.save();
 
         return res.status(200).json({
             status: 'Success',
-            data: quizData
+            data: updatedQuiz
         });
     } catch (error) {
         res.status(500).json({
@@ -279,6 +309,9 @@ router.patch('/submit/response/:quizId', async (req, res) => {
         });
     }
 });
+
+
+
 
 
 

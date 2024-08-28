@@ -602,12 +602,51 @@
 }
 
 .quiz-page-options {
+  text-align: center;
+  margin-top: 3%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3vw;
+  cursor: pointer;
+}
+
+.option-grid-item {
   background-color: #F0F0F0;
   width: 15vw;
   height: 7vh;
   border-radius: 5px;
   text-align: center;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.5vw;
+  margin: auto;
 }
+
+
+
+.option-selected {
+  border: 2px solid #5076FF;
+}
+
+.quiz-submit-btn {
+  background-color: #60B84B;
+  padding: 0.5vw;
+  border-radius: 5px;
+  text-align: center;
+  width: 7vw;
+  color: #fff;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  margin-top: 5%;
+}
+
+.congo-image {
+  width: 20vw;
+  height: 40vh;
+}
+
+.score-text {
+  font-weight: 700;
+  font-size: 2.5vw;
+}
+
+
+
