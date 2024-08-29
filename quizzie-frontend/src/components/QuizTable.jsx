@@ -3,15 +3,18 @@ import '../App.css';
 import editIcon  from './vectors/Vector.png';
 import  deleteIcon  from './vectors/Vector (1).png';
 import  shareIcon  from './vectors/Vector (2).png'
+import QuestionAnalysis from './QuestionAnalysis';
 
 const QuizTable = ({quizCollections, setDeleteModal, setQuizId}) => {
 
   const [updateScreen, setUpdateScreen] = useState(false);
+  const [analysisQuizId, setAnalysisQuizId] = useState(null);
 
   
   
   const analysis = (id) => {
     setUpdateScreen(true);
+    setAnalysisQuizId(id);
 
   }
 
@@ -35,7 +38,7 @@ const QuizTable = ({quizCollections, setDeleteModal, setQuizId}) => {
   return (
     <>
     
-    <h1 style={{color: '#5076FF', textAlign: !updateScreen ? 'center': 'left'}}>{!updateScreen ? 'Quiz Analysis' : 'Quiz question analysis'}</h1>
+    <h1 style={{color: '#5076FF', textAlign: !updateScreen ? 'center': 'left'}}>{!updateScreen ? 'Quiz Analysis' : ''}</h1>
     {!updateScreen && <div className="quiz-table-container">
       <table className="quiz-table">
         <thead>
@@ -80,10 +83,7 @@ const QuizTable = ({quizCollections, setDeleteModal, setQuizId}) => {
     </div>}
 
       {updateScreen && 
-      
-        <div style={{textAlign: 'left'}}>
-            <h2>Q.1 Question place holder for analysis ? </h2>
-        </div>
+      <QuestionAnalysis analysisQuizId={analysisQuizId}/>
         }
     </>
   );

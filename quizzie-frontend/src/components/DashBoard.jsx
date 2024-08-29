@@ -58,6 +58,7 @@ function DashBoard({creatorData}) {
   }
 
   return (
+    <>
     <div className='dashboard-header'>
        <div className='dashboard-screen'>
           <div className='text-header'>
@@ -85,15 +86,16 @@ function DashBoard({creatorData}) {
             </div>
           </div>
        </div>
-       <div style={{margin: '0 auto'}}>
+       <div style={{margin: clickedPage.analytics ? '0': '0 auto'}}>
            {clickedPage.dashboard && <DashBoardPage quizData={quizData} quizCollections={quizCollections}/>}
 
           {clickedPage.analytics && <Analytics quizCollections={quizCollections}/>}
 
           {clickedPage.createQuiz && <QuizApp/>}
-
        </div>
+
     </div>
+    </>
   )
 }
 
