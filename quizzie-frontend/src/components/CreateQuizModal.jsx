@@ -134,7 +134,7 @@ function CreateQuizModal({ quizType, onClose, quizName, setIsPublishedModalOpen,
 
       if (response.data.status === 'Success') {
         setIsPublishedModalOpen(true);
-        setPublishedLink(`http://localhost:5000/submit/${response.data.quizId}`)
+        setPublishedLink(`http://localhost:3000/submit/${response.data.quizId}`)
         showToasts('Quiz created successfully', 'success');
       }
     } catch (error) {
@@ -158,6 +158,7 @@ function CreateQuizModal({ quizType, onClose, quizName, setIsPublishedModalOpen,
       <div className="modal-content">
         <div className="modal-body">
           <div className="question-nav">
+            <div className='question-nav-items'>
             {questions.map((_, index) => (
               <div
                 key={index}
@@ -173,6 +174,11 @@ function CreateQuizModal({ quizType, onClose, quizName, setIsPublishedModalOpen,
                 +
               </div>
             )}
+            </div>
+
+            <div>
+              Max 5 questions
+            </div>
           </div>
 
           <div className="question-section">
@@ -223,12 +229,12 @@ function CreateQuizModal({ quizType, onClose, quizName, setIsPublishedModalOpen,
 
             {questions[currentQuestionIndex].options.map((option, optionIndex) => (
               <div key={optionIndex} className="option-container">
-                <input
+                {quizType === 'qna' && <input
                   type="radio"
                   name={`correctAns-${currentQuestionIndex}`}
                   checked={questions[currentQuestionIndex].correctAns === (option.text || option.image)}
                   onChange={() => handleCorrectAnswerChange(optionIndex, option.text || option.image)}
-                />
+                />}
                 {questions[currentQuestionIndex].optionType !== 'image' && (
                   <input
                     type="text"
@@ -263,6 +269,7 @@ function CreateQuizModal({ quizType, onClose, quizName, setIsPublishedModalOpen,
             )}
           </div>
 
+          {quizType === 'qna' && 
           <div className="timer-section">
             <p>Timer</p>
             <div className="timer-buttons">
@@ -285,7 +292,7 @@ function CreateQuizModal({ quizType, onClose, quizName, setIsPublishedModalOpen,
                 10 sec
               </button>
             </div>
-          </div>
+          </div>}
         </div>
 
         <div className="modal-footer">

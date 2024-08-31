@@ -15,6 +15,7 @@ function QuestionAnalysis({ analysisQuizId }) {
             const response = await axios.get(`http://localhost:5000/get/quiz/${analysisQuizId}`);
             if (response.data.status === 'Success') {
                 setQuizData(response.data.quiz);
+                console.log(response.data.quiz)
             } else {
                 showToasts('Quiz is not valid or deleted', 'error');
             }
@@ -41,37 +42,55 @@ function QuestionAnalysis({ analysisQuizId }) {
                         </div>
                     </div>
 
+                    <div className='quiz-scrollable'>
+
                     {quizData.questions.map((ele, id) => (
                         <div key={ele._id}>
                             <div style={{ marginBottom: '3vw', fontSize: '2vw', fontWeight: '500' }}>
                                 Q.{id + 1} {ele.question}
                             </div>
 
-                            <div className='question-analysis-options'>
-                                <div className='question-analysis-options-1'>
-                                    <p style={{ fontSize: '2vw', fontWeight: '500' }}>
-                                        {ele.responses.reduce((acc, curr) => acc + curr.corrected + curr.incorrected, 0)}
-                                    </p>
-                                    <p>people attempted the question</p>
+                            {quizData.quizType === 'qna' &&
+                                <div className='question-analysis-options'>
+                                    <div className='question-analysis-options-1'>
+                                        <p style={{ fontSize: '2vw', fontWeight: '500' }}>
+                                            {ele.responses.reduce((acc, curr) => acc + curr.corrected + curr.incorrected, 0)}
+                                        </p>
+                                        <p>people attempted the question</p>
+                                    </div>
+                                    <div className='question-analysis-options-1'>
+                                        <p style={{ fontSize: '2vw', fontWeight: '500' }}>
+                                            {ele.responses.reduce((acc, curr) => acc + curr.corrected, 0)}
+                                        </p>
+                                        <p>people answered correctly</p>
+                                    </div>
+                                    <div className='question-analysis-options-1'>
+                                        <p style={{ fontSize: '2vw', fontWeight: '500' }}>
+                                            {ele.responses.reduce((acc, curr) => acc + curr.incorrected, 0)}
+                                        </p>
+                                        <p>people answered incorrectly</p>
+                                    </div>
+                                    <div style={{ marginBottom: '0.5vw' }}>
+                                        <hr />
+                                    </div>
+                                </div>}
+
+                            {quizData.quizType === 'poll' &&
+                                <div className='question-analysis-options'>
+                                    {ele.responses[0].selectedCounts.map((countData, idx) => (
+                                        <div key={idx} style={{display: 'flex', justifyContent: 'space-evenly', alignItems: 'center'}} className='question-analysis-options-1'>
+                                            <p style={{ fontSize: '3vw', fontWeight: '500' }}>
+                                                {countData.count} {/* Display the count */}
+                                            </p>
+                                            <p>Option {idx + 1}</p> {/* Display the option text */}
+                                        </div>
+                                    ))}
                                 </div>
-                                <div className='question-analysis-options-1'>
-                                    <p style={{ fontSize: '2vw', fontWeight: '500' }}>
-                                        {ele.responses.reduce((acc, curr) => acc + curr.corrected, 0)}
-                                    </p>
-                                    <p>people answered correctly</p>
-                                </div>
-                                <div className='question-analysis-options-1'>
-                                    <p style={{ fontSize: '2vw', fontWeight: '500' }}>
-                                        {ele.responses.reduce((acc, curr) => acc + curr.incorrected, 0)}
-                                    </p>
-                                    <p>people answered incorrectly</p>
-                                </div>
-                                <div style={{ marginBottom: '0.5vw' }}>
-                                    <hr />
-                                </div>
-                            </div>
+                            }
+
                         </div>
                     ))}
+                    </div>
                 </>
             ) : (
                 <p>Loading...</p>

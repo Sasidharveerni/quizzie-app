@@ -83,7 +83,7 @@ function ResultPage() {
 
     const submitResponse = async (idx, questionId) => {
         try {
-            const response = await axios.post(`http://localhost:5000/submit/response/${quizId}`, {
+            const response = await axios.patch(`http://localhost:5000/submit/response/${quizId}`, {
                 questionId,
                 selectedOption
             });

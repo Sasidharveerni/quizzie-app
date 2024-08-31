@@ -17,7 +17,11 @@ function QuizPage({ onSelectQuizType, quizName, setQuizName, setIsQuizTypeModalO
   };
 
   const handleQuizName = () => {
-    if(onSelectQuizType && quizName.length >= 3) {
+    if(selectedQuizType === '') {
+      showToasts('Please select quiz type', 'error')
+    }
+    if(selectedQuizType && quizName.length >= 3) {
+      console.log(selectedQuizType)
       setIsCreateQuizModalOpen(true);
       setIsQuizTypeModalOpen(false);
     } else {
@@ -30,18 +34,17 @@ function QuizPage({ onSelectQuizType, quizName, setQuizName, setIsQuizTypeModalO
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <h2>Quiz name</h2>
             <input
               type="text"
-              placeholder="Enter quiz name"
+              placeholder="Quiz name"
               className="quiz-input"
               onChange={(e) => setQuizName(e.target.value)}
               value={quizName}
               required
             />
             
-            <h2>Quiz Type</h2>
             <div className="quiz-type-container">
+            <p>Quiz Type</p>
               <button
                 onClick={() => handleQuizTypeSelection('qna')}
                 className={`quiz-type-button ${selectedQuizType === 'qna' ? 'selected' : ''}`}

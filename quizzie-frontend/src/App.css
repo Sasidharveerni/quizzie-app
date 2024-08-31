@@ -142,11 +142,33 @@
     font-size: 1.75em;
   }
   .quizzes-section {
-    margin: 5%;
-  }
+    margin-left: 3%;
+    overflow-y: auto;
+    max-height: 50vh;
+    overflow-x: hidden;
+}
+
+
+.quizzes-section::-webkit-scrollbar {
+    width: 0px; 
+    background: transparent;
+}
+
+
+.quizzes-section {
+    scrollbar-width: none; 
+    -ms-overflow-style: none;  
+}
+
+
+.quizzes-section::-ms-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
 
   .quiz-data-header {
-    width: 15vw;
+    width: 18vw;
     height: 25vh;
     background-color: #ffffff;
     border-radius: 10px;
@@ -166,14 +188,9 @@
     gap: 10px;
     width: 80vw;
     height: 50vh;
-    overflow-y: scroll;
   }
 
-  .quizzes-section {
-    max-width: 50vw;
-    height: 30vh;
-    overflow-y: scroll;
-  }
+  
   
   .question-analysis-item1 {
     display: flex;
@@ -196,6 +213,35 @@
     margin-top: 2vw;
     margin-right: 2vw;
   }
+
+  .quiz-scrollable {
+    max-width: 80vw;
+    max-height: 70vh; 
+    overflow-y: auto;
+}
+
+/* Customize the scrollbar */
+.quiz-scrollable::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+.quiz-scrollable::-webkit-scrollbar-track {
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
+}
+
+.quiz-scrollable::-webkit-scrollbar-thumb {
+    width: 0px;
+    background: transparent;
+}
+
+
+/* Scrollbar for Firefox */
+.quiz-scrollable {
+    scrollbar-width: thin;
+    scrollbar-color: transparent;
+}
 
 
 
@@ -288,6 +334,7 @@
     width: 400px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
+    color: #9F9F9F;
   }
   
   .quiz-input {
@@ -297,20 +344,26 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    color: #9F9F9F;
+  }
+  .quiz-input::placeholder {
+    color: #9F9F9F;
   }
   
   .quiz-type-container {
     display: flex;
-    justify-content: center;
-    gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
   }
   
   .quiz-type-button {
-    padding: 0.5rem 1rem;
+    width: 10vw;
+    height: 10vh;
     border-radius: 5px;
     border: none;
     cursor: pointer;
     background-color: #f0f0f0;
+    color: #9F9F9F;
   }
   
   .selected {
@@ -329,10 +382,12 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    width: 15vw;
   }
   
   .cancel-button {
-    background-color: #f0f0f0;
+    background-color: #ffffff;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   }
   
   .continue-button {
@@ -361,7 +416,7 @@
     background-color: white;
     padding: 20px;
     border-radius: 10px;
-    width: 500px;
+    width: 70vw;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   }
   
@@ -465,10 +520,7 @@
     cursor: pointer;
   }
   
-  .cancel-button {
-    background-color: #ccc;
-    color: black;
-  }
+ 
   
   .create-button {
     background-color: #4caf50;
@@ -483,26 +535,25 @@
 .question-nav {
   display: flex;
   gap: 8px;
-  justify-content: center;
+  justify-content: space-between;
   margin-bottom: 15px;
+  align-items: center;
 }
 
 .question-circle {
+  position: relative;
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background-color: #ccc;
-  color: #fff;
+  background-color: #ffffff;
+  color: #9F9F9F;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  font-weight: bold;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
-.question-circle.active {
-  background-color: #007bff;
-}
 
 .question-add {
   width: 30px;
@@ -523,37 +574,24 @@
 
 
 
-
-
-
-
-.question-nav {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin-bottom: 15px;
-}
-
-.question-circle {
-  position: relative;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background-color: #ccc;
-  color: #fff;
+.question-nav-items {
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
-  font-weight: bold;
+  gap: 20px;
 }
+
+
+
+
+
 
 .remove-question {
   position: absolute;
   top: -5px;
   right: -5px;
-  background-color: red;
-  color: white;
+  background-color: transparent;
+  color: #000;
   border-radius: 50%;
   width: 15px;
   height: 15px;
@@ -568,17 +606,17 @@
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background-color: #28a745;
-  color: #fff;
+  background-color: transparent;
+  color: #9F9F9F;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 2.5vw;
 }
 
 .question-add:hover {
-  background-color: #218838;
+  background-color: #F0F0F0;
 }
 
 
