@@ -12,7 +12,7 @@ function QuestionAnalysis({ analysisQuizId }) {
 
     const getQuizzes = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/get/quiz/${analysisQuizId}`);
+            const response = await axios.get(`https://quizzie-backend-g7k0.onrender.com/get/quiz/${analysisQuizId}`);
             if (response.data.status === 'Success') {
                 setQuizData(response.data.quiz);
                 console.log(response.data.quiz)

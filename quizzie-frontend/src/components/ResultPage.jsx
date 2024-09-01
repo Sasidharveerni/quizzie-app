@@ -33,7 +33,7 @@ function ResultPage() {
 
     const getQuizDetails = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/get/quiz/${quizId}`);
+            const response = await axios.get(`https://quizzie-backend-g7k0.onrender.com/get/quiz/${quizId}`);
             if (response.data.status === 'Success') {
                 console.log(response.data.quiz);
                 setQuizData(response.data.quiz.questions);
@@ -83,7 +83,7 @@ function ResultPage() {
 
     const submitResponse = async (idx, questionId) => {
         try {
-            const response = await axios.patch(`http://localhost:5000/submit/response/${quizId}`, {
+            const response = await axios.patch(`https://quizzie-backend-g7k0.onrender.com/submit/response/${quizId}`, {
                 questionId,
                 selectedOption
             });

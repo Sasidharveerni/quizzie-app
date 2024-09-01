@@ -6,7 +6,7 @@ import showToasts from './Toast';
 function DeleteQuiz({ handledeleteModalClose, quizId}) {
     const deleteQuiz = async () => {
         try {
-           const response = await axios.delete(`http://localhost:5000/delete/quiz/${quizId}`);
+           const response = await axios.delete(`https://quizzie-backend-g7k0.onrender.com/delete/quiz/${quizId}`);
            if(response.data.status === 'Success') {
             showToasts('Quiz deleted successfully', 'success');
            }

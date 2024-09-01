@@ -22,7 +22,7 @@ function App() {
     try {
       console.log(email)
       if (email !== '' && token !== '') {
-        const response = await axios.post('http://localhost:5000/login/status', {email} , {
+        const response = await axios.post('https://quizzie-backend-g7k0.onrender.com/login/status', {email} , {
           headers: {
             Authorization: `Bearer ${token}`
           }

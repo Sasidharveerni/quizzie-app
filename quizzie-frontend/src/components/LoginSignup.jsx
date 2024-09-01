@@ -76,7 +76,7 @@ function LoginSignup({setCreatorData}) {
     const register = async () => {
         if (validation()) {
             try {
-                const response = await axios.post('http://localhost:5000/register', {
+                const response = await axios.post('https://quizzie-backend-g7k0.onrender.com/register', {
                     username: userData.username,
                     email: userData.email,
                     password: userData.password
@@ -99,7 +99,7 @@ function LoginSignup({setCreatorData}) {
     const login = async () => {
             if(loginValidation()) {
                 try {
-                    const response = await axios.post('http://localhost:5000/login', {
+                    const response = await axios.post('https://quizzie-backend-g7k0.onrender.com/login', {
                         email: loginData.email,
                         password: loginData.password
                     });
