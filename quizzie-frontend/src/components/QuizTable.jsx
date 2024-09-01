@@ -4,6 +4,7 @@ import editIcon  from './vectors/Vector.png';
 import  deleteIcon  from './vectors/Vector (1).png';
 import  shareIcon  from './vectors/Vector (2).png'
 import QuestionAnalysis from './QuestionAnalysis';
+import showToasts from './Toast';
 
 const QuizTable = ({quizCollections, setDeleteModal, setQuizId, setClickedPage, clickedPage}) => {
 
@@ -23,6 +24,12 @@ const QuizTable = ({quizCollections, setDeleteModal, setQuizId, setClickedPage, 
     const options = { day: 'numeric', month: 'short', year: 'numeric' };
     return date.toLocaleDateString('en-GB', options).replace(' ', ' ').replace(',', '');
   }
+
+  const handleCopy = (link) => {
+    navigator.clipboard.writeText(link).then(() => {
+      showToasts('Link copied to clipboard!', 'success');
+    });
+  };
 
   console.log(quizCollections)
 
@@ -68,7 +75,7 @@ const QuizTable = ({quizCollections, setDeleteModal, setQuizId, setClickedPage, 
                        <img src={deleteIcon} alt='' />
                     
                   </button>
-                  <button className="action-button share">
+                  <button className="action-button share" onClick={() => handleCopy(`https://quizzie-app-lemon.vercel.app/${ele._id}`)}>
                     
                       <img src={shareIcon} alt='' />
                   
