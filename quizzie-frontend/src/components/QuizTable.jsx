@@ -75,7 +75,7 @@ const QuizTable = ({quizCollections, setDeleteModal, setQuizId, setClickedPage, 
                        <img src={deleteIcon} alt='' />
                     
                   </button>
-                  <button className="action-button share" onClick={() => handleCopy(`https://quizzie-app-lemon.vercel.app/${ele._id}`)}>
+                  <button className="action-button share" onClick={() => handleCopy(`https://quizzie-app-lemon.vercel.app/submit/${ele._id}`)}>
                     
                       <img src={shareIcon} alt='' />
                   
