@@ -139,7 +139,7 @@ function LoginSignup({setCreatorData}) {
                     </div>
 
                     <div className='components-1'>
-                        <div style={{ cursor: 'pointer' }} className={click.signup ? 'component-style' : ''} onClick={() => setClick({ ...click, signup: true, login: false })}>
+                        <div style={{ cursor: 'pointer', marginRight: '5vw' }} className={click.signup ? 'component-style' : ''} onClick={() => setClick({ ...click, signup: true, login: false })}>
                             Sign Up
                         </div>
 

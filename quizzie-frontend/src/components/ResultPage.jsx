@@ -116,7 +116,7 @@ function ResultPage() {
                                 </div>}
                         </div>
 
-                        <div style={{ fontSize: '2.5vw' }}>
+                        <div className='quiz-question-text'>
                             {quizData[currentQuestionIndex].question}
                         </div>
 
@@ -141,18 +141,37 @@ function ResultPage() {
                                         src={imgOption.image}
                                         alt='Quiz option'
                                         onClick={() => setSelectedOption(imgOption.image)}
-                                        className={`option-grid-item ${selectedOption === imgOption.image ? 'option-selected' : ''}`}
+                                        className={`quiz-option-image option-grid-item ${selectedOption === imgOption.image ? 'option-selected' : ''}`}
                                     />
                                 ))
                             }
+
+                            {quizData[currentQuestionIndex].optionType === 'text-image' &&
+                                quizData[currentQuestionIndex].options.map((Option, idx) => (
+                                    <div key={idx} className={`option-grid-item ${selectedOption === Option.text ? 'option-selected' : ''}`} onClick={() => setSelectedOption(Option.text)}>
+                                        <div className='text-image-flex'>
+                                            <div>
+                                                {Option.text}
+                                            </div>
+                                            <img
+                                                src={Option.image}
+                                                alt='Quiz option'
+                                                className='quiz-option-image'
+                                            />
+                                        </div>
+                                    </div>
+                                ))
+                            }
+
+
                         </div>
 
-                        <div>
+                        <div style={{marginTop: '2%'}}>
                             <button className='quiz-submit-btn' onClick={handleNextQuestion}>
                                 {currentQuestionIndex === quizData.length - 1 ? 'Submit' : 'Next'}
                             </button>
-                    </div>
                         </div>
+                    </div>
 
                 )}
 
@@ -165,7 +184,7 @@ function ResultPage() {
                 )}
 
                 {questionType === 'poll' && scoreBoard && (
-                    <div style={{ textAlign: 'center' }}>
+                    <div className='thank-you-text'>
                         Thank you for participating in the poll
                     </div>
                 )}

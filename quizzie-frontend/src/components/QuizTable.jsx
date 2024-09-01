@@ -5,7 +5,7 @@ import  deleteIcon  from './vectors/Vector (1).png';
 import  shareIcon  from './vectors/Vector (2).png'
 import QuestionAnalysis from './QuestionAnalysis';
 
-const QuizTable = ({quizCollections, setDeleteModal, setQuizId}) => {
+const QuizTable = ({quizCollections, setDeleteModal, setQuizId, setClickedPage, clickedPage}) => {
 
   const [updateScreen, setUpdateScreen] = useState(false);
   const [analysisQuizId, setAnalysisQuizId] = useState(null);
@@ -15,7 +15,7 @@ const QuizTable = ({quizCollections, setDeleteModal, setQuizId}) => {
   const analysis = (id) => {
     setUpdateScreen(true);
     setAnalysisQuizId(id);
-
+    setClickedPage({...clickedPage, questionAnalysis: true})
   }
 
   const formatDate = (dateString) => {
@@ -37,7 +37,7 @@ const QuizTable = ({quizCollections, setDeleteModal, setQuizId}) => {
 
   return (
     <>
-    
+    <div>
     <h1 style={{color: '#5076FF', textAlign: !updateScreen ? 'center': 'left'}}>{!updateScreen ? 'Quiz Analysis' : ''}</h1>
     {!updateScreen && <div className="quiz-table-container">
       <table className="quiz-table">
@@ -81,6 +81,7 @@ const QuizTable = ({quizCollections, setDeleteModal, setQuizId}) => {
         </tbody>
       </table>
     </div>}
+    </div>
 
       {updateScreen && 
       <QuestionAnalysis analysisQuizId={analysisQuizId}/>

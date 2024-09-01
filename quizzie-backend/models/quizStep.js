@@ -37,7 +37,7 @@ const quizStepSchema = new mongoose.Schema({
     },
     optionType: {
         type: String,
-        enum: ['text', 'image', 'textimage'],
+        enum: ['text', 'image', 'text-image'],
         required: true
     },
     options: {

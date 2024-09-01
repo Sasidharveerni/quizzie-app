@@ -33,7 +33,7 @@ function QuizPage({ onSelectQuizType, quizName, setQuizName, setIsQuizTypeModalO
     <>
       {showModal && (
         <div className="modal-overlay">
-          <div className="modal-content">
+          <div style={{width: '50vw'}} className="modal-content">
             <input
               type="text"
               placeholder="Quiz name"

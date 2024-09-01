@@ -13,7 +13,8 @@ function DashBoard({creatorData}) {
   const [clickedPage, setClickedPage] = useState({
     dashboard: true,
     analytics: false,
-    createQuiz: false
+    createQuiz: false,
+    questionAnalysis: false
   });
 
   useEffect(() => {
@@ -66,15 +67,15 @@ function DashBoard({creatorData}) {
           </div>
           
           <div>
-            <div className={clickedPage.dashboard ? 'selectedOpt' : ''} style={{marginBottom: '1vw', cursor: 'pointer', textAlign: 'center'}} onClick={() => setClickedPage({...clickedPage, analytics: false, dashboard: true, createQuiz: false})}>
+            <div className={clickedPage.dashboard ? 'selectedOpt' : ''} style={{marginBottom: '1vw', cursor: 'pointer', textAlign: 'center'}} onClick={() => setClickedPage({...clickedPage, analytics: false, dashboard: true, createQuiz: false, questionAnalysis: false})}>
                 Dashboard
             </div>
 
-            <div className={clickedPage.analytics ? 'selectedOpt' : ''} style={{marginBottom: '1vw', textAlign: 'center', cursor: 'pointer',}} onClick={() => setClickedPage({...clickedPage, analytics: true, dashboard: false, createQuiz: false})}>
+            <div className={clickedPage.analytics ? 'selectedOpt' : ''} style={{marginBottom: '1vw', textAlign: 'center', cursor: 'pointer',}} onClick={() => setClickedPage({...clickedPage, analytics: true, dashboard: false, createQuiz: false, questionAnalysis: false})}>
                 Analytics
             </div>
 
-            <div className={clickedPage.createQuiz ? 'selectedOpt' : ''} style={{textAlign: 'center', cursor: 'pointer'}} onClick={() => setClickedPage({...clickedPage, analytics: false, dashboard: false, createQuiz: true})}>
+            <div className={clickedPage.createQuiz ? 'selectedOpt' : ''} style={{textAlign: 'center', cursor: 'pointer'}} onClick={() => setClickedPage({...clickedPage, analytics: false, dashboard: false, createQuiz: true, questionAnalysis: false})}>
                 Create Quiz
             </div>
           </div>
@@ -86,10 +87,10 @@ function DashBoard({creatorData}) {
             </div>
           </div>
        </div>
-       <div style={{margin: clickedPage.analytics ? '0': '0 auto'}}>
+       <div style={{margin: clickedPage.questionAnalysis ? '0': '0 auto'}}>
            {clickedPage.dashboard && <DashBoardPage quizData={quizData} quizCollections={quizCollections}/>}
 
-          {clickedPage.analytics && <Analytics quizCollections={quizCollections}/>}
+          {clickedPage.analytics && <Analytics quizCollections={quizCollections} setClickedPage={setClickedPage} clickedPage={clickedPage}/>}
 
           {clickedPage.createQuiz && <QuizApp/>}
        </div>
