@@ -134,7 +134,7 @@ function CreateQuizModal({ quizType, onClose, quizName, setIsPublishedModalOpen,
 
       if (response.data.status === 'Success') {
         setIsPublishedModalOpen(true);
-        setPublishedLink(`http://localhost:3000/submit/${response.data.quizId}`)
+        setPublishedLink(`https://quizzie-app-lemon.vercel.app/submit/${response.data.quizId}`)
         showToasts('Quiz created successfully', 'success');
       }
     } catch (error) {
