@@ -319,6 +319,91 @@ router.delete('/delete/quiz/:quizId', async (req, res) => {
 
 
 
+router.patch('/update/quiz/:quizId', async (req, res) => {
+    try {
+        const { quizId } = req.params;
+        const { quizName, quizType, questions } = req.body;
+        console.log('Received quiz data:', JSON.stringify({ quizName, quizType, questions }, null, 2));
+
+        // Check if `questions` is an array
+        if (!Array.isArray(questions) || questions.length === 0) {
+            return res.status(400).json({
+                status: 'Failed',
+                message: 'Questions must be a non-empty array'
+            });
+        }
+
+        if (quizType !== 'poll') {
+            questions.forEach((question, index) => {
+                console.log(`Checking question ${index + 1}:`, JSON.stringify(question, null, 2));
+
+                if (!question.question || !question.optionType || !question.options || !question.correctAns) {
+                    console.error('Error in question:', JSON.stringify(question, null, 2));
+                    throw new Error('Each question must include `question`, `optionType`, `options`, and `correctAns` fields');
+                }
+            });
+        }
+
+        // Update the quiz with the new data
+        const updatedQuiz = await Quiz.findByIdAndUpdate(
+            quizId,
+            {
+                quizName,
+                quizType,
+                questions: questions.map(question => ({
+                    question: question.question,
+                    optionType: question.optionType,
+                    options: question.options,
+                    correctAns: question.correctAns,
+                    views: parseInt(question.views, 10) || 0,
+                    timer: parseInt(question.timer, 10) || 0
+                }))
+            },
+            { new: true } // Return the updated document
+        );
+
+        if (!updatedQuiz) {
+            return res.status(404).json({
+                status: 'Failed',
+                message: 'Quiz not found'
+            });
+        }
+
+        // Update the quiz collection in QuizSec (if needed)
+        let quizSec = await QuizSec.findOne({ creator: updatedQuiz.creator });
+        if (!quizSec) {
+            return res.status(404).json({
+                status: 'Failed',
+                message: 'QuizSec not found'
+            });
+        }
+
+        const quizIndex = quizSec.quizCollections.findIndex(q => q._id.toString() === quizId);
+        if (quizIndex === -1) {
+            return res.status(404).json({
+                status: 'Failed',
+                message: 'Quiz not found in QuizSec'
+            });
+        }
+
+        // Update the quiz in quizCollections
+        quizSec.quizCollections[quizIndex] = updatedQuiz;
+        await quizSec.save();
+
+        // Respond with success
+        res.status(200).json({
+            status: 'Success',
+            quizId: updatedQuiz._id,
+            data: quizSec
+        });
+    } catch (error) {
+        console.error('Full error:', error);
+        res.status(500).json({
+            status: 'Failed',
+            message: error.message
+        });
+    }
+});
 
 
 

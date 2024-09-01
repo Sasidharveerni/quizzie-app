@@ -5,11 +5,14 @@ import  deleteIcon  from './vectors/Vector (1).png';
 import  shareIcon  from './vectors/Vector (2).png'
 import QuestionAnalysis from './QuestionAnalysis';
 import showToasts from './Toast';
+import EditingQuestion from './EditingQuestion';
 
 const QuizTable = ({quizCollections, setDeleteModal, setQuizId, setClickedPage, clickedPage}) => {
 
   const [updateScreen, setUpdateScreen] = useState(false);
   const [analysisQuizId, setAnalysisQuizId] = useState(null);
+  const [editScreen, setEditScreen] = useState(false);
+  const [quizzId, setQuizzId] = useState(null)
 
   
   
@@ -66,7 +69,7 @@ const QuizTable = ({quizCollections, setDeleteModal, setQuizId, setClickedPage, 
               <td>{ele.views}</td>
               <td>
                 <div className="actions">
-                  <button className="action-button edit">
+                  <button className="action-button edit" onClick={() => {setEditScreen(true); setQuizzId(ele._id)}}>
                     
                       <img src={editIcon} alt='' />
                     
@@ -92,6 +95,10 @@ const QuizTable = ({quizCollections, setDeleteModal, setQuizId, setClickedPage, 
 
       {updateScreen && 
       <QuestionAnalysis analysisQuizId={analysisQuizId}/>
+        }
+
+        {editScreen && 
+        <EditingQuestion quizId={quizzId} setEditScreen={setEditScreen}/>
         }
     </>
   );

@@ -49,6 +49,7 @@ function CreateQuizModal({ quizType, onClose, quizName, setIsPublishedModalOpen,
   };
 
   const handleOptionChange = (optionIndex, key, value) => {
+
     const newQuestions = [...questions];
     newQuestions[currentQuestionIndex].options[optionIndex][key] = value;
     setQuestions(newQuestions);
@@ -118,13 +119,29 @@ function CreateQuizModal({ quizType, onClose, quizName, setIsPublishedModalOpen,
           views: 0,
         };
 
+        if(q.question === '') {
+          showToasts('Please enter question', 'error');
+        }
+
+        if(q.optionType === 'text-image' && isValidImageUrl(q.options.image)) {
+          return questionData;
+        }
+
+        else if(q.optionType === 'image' && isValidImageUrl(q.options.image)) {
+          return questionData;
+        } else {
+          showToasts('Please enter valid image url', 'error')
+        }
+
         if (q.correctAns !== null) {
           questionData.correctAns = q.correctAns;
         }
-
+      
         return questionData;
+        
       }),
     };
+
 
     console.log('Quiz Data:', quizData);
 
@@ -144,6 +161,11 @@ function CreateQuizModal({ quizType, onClose, quizName, setIsPublishedModalOpen,
 
     onClose();
   };
+
+  const isValidImageUrl = (url) => {
+    const pattern = /^(https?:\/\/.*\.(?:png|jpg|jpeg|webp|avif|svg))$/i;
+    return pattern.test(url);
+};
 
   if (!userId) {
     return (
@@ -189,6 +211,7 @@ function CreateQuizModal({ quizType, onClose, quizName, setIsPublishedModalOpen,
               className="quiz-input"
               value={questions[currentQuestionIndex].question}
               onChange={handleInputChange}
+              required
             />
 
             <div className="option-type">
