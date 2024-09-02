@@ -502,8 +502,9 @@ scrollbar-width: none;
   
   .timer-section {
     margin-top: 20px;
-    
+    position: relative;
     float: right;
+    bottom: 12vw;
   }
   
   .timer-buttons {
@@ -529,6 +530,8 @@ scrollbar-width: none;
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
+    position: relative;
+    top: 10vw;
   }
   
   .cancel-button, .create-button {

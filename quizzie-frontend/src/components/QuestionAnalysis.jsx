@@ -24,6 +24,11 @@ function QuestionAnalysis({ analysisQuizId }) {
         }
     };
 
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const options = { day: 'numeric', month: 'short', year: 'numeric' };
+        return date.toLocaleDateString('en-GB', options).replace(' ', ' ').replace(',', '');
+      }
     return (
         <div style={{ margin: '5%' }}>
             {quizData ? (
@@ -34,7 +39,7 @@ function QuestionAnalysis({ analysisQuizId }) {
                         </div>
                         <div style={{ color: '#FF5D01' }}>
                             <p style={{ marginBottom: '0' }}>
-                                Created on : <span>{new Date(quizData.createdAt).toLocaleDateString()}</span>
+                                Created on : <span>{formatDate(quizData.createdAt)}</span>
                             </p>
                             <p style={{ marginTop: '0' }}>
                                 Impressions : <span>{quizData.views}</span>
