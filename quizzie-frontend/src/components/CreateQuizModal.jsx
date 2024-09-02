@@ -318,7 +318,7 @@ function CreateQuizModal({ quizType, onClose, quizName, setIsPublishedModalOpen,
           </div>}
         </div>
 
-        <div className="modal-footer">
+        <div className={quizType ===  'qna' ? 'modal-footer qna-type' : 'modal-footer'}>
           <button onClick={onClose} className="cancel-button">Close</button>
           <button onClick={handleSubmit} className="create-button">Create Quiz</button>
         </div>

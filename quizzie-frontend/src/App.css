@@ -530,6 +530,8 @@ scrollbar-width: none;
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
+  }
+  .qna-type {
     position: relative;
     top: 10vw;
   }
