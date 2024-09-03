@@ -60,7 +60,7 @@ function DashBoardPage({quizData, quizCollections}) {
          <div>
            <div className='grid-quiz'>
             {quizCollections &&  quizCollections.map((ele, id) => (
-              <div className='quiz-data-header' key={id}>
+              ele.views > 10 ? ( <div className='quiz-data-header' key={id}>
                 <div className='quiz-data'>
                 <p style={{fontSize: '1.25em'}}>{ele.quizName}</p>
                 <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
@@ -75,7 +75,7 @@ function DashBoardPage({quizData, quizCollections}) {
                         {formatDate(ele.createdAt)}
                     </span>
                 </div>
-            </div>
+            </div>) : null
             ))}
             </div>
             {!quizCollections && <p>Create a quiz</p>}
