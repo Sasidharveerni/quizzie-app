@@ -89,6 +89,7 @@
     padding: 1%;
     border-radius: 5px;
     color: #474444;
+    cursor: pointer;
   }
   
   .dashboard-header {

@@ -114,7 +114,7 @@ function LoginSignup({setCreatorData}) {
                         showToasts(response.data.message, 'error');
                     }
                 } catch (error) {
-                    showToasts(error, 'error');
+                    showToasts(error.response.data.message, 'error');
                     console.log(error);
                 }
             }
