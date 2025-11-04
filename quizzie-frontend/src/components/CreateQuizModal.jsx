@@ -146,7 +146,7 @@ function CreateQuizModal({ quizType, onClose, quizName, setIsPublishedModalOpen,
     console.log('Quiz Data:', quizData);
 
     try {
-      const response = await axios.post(`https://quizzie-backend-g7k0.onrender.com/create/quiz/${userId}`, quizData);
+      const response = await axios.post(`https://quizzie-backend-1-7ozy.onrender.com/create/quiz/${userId}`, quizData);
       console.log(response);
 
       if (response.data.status === 'Success') {

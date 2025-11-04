@@ -15,7 +15,7 @@ function EditingQuestion({ quizId, setEditScreen }) {
 
   const getQuizDetails = async () => {
     try {
-      const response = await axios.get(`https://quizzie-backend-g7k0.onrender.com/get/quiz/${quizId}`);
+      const response = await axios.get(`https://quizzie-backend-1-7ozy.onrender.com/get/quiz/${quizId}`);
       if (response.data.status === 'Success') {
         console.log(response.data.quiz);
         setQuestions(response.data.quiz.questions);
@@ -67,7 +67,7 @@ function EditingQuestion({ quizId, setEditScreen }) {
   const handleSubmit = async () => {
     console.log('Quiz submitted', questions);
     try {
-        const response = await axios.patch(`https://quizzie-backend-g7k0.onrender.com/update/quiz/${quizId}`, {
+        const response = await axios.patch(`https://quizzie-backend-1-7ozy.onrender.com/update/quiz/${quizId}`, {
             quizName,
             quizType,
             questions

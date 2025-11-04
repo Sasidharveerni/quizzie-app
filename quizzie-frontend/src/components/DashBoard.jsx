@@ -31,7 +31,7 @@ function DashBoard({creatorData}) {
 
   const getUserQuizData = async () => {
      try {
-      const response = await axios.get(`https://quizzie-backend-g7k0.onrender.com/get/all-quiz/${creatorData._id}`);
+      const response = await axios.get(`https://quizzie-backend-1-7ozy.onrender.com/get/all-quiz/${creatorData._id}`);
       console.log(response)
       if(response.data.status === 'Success') {
         setQuizData({quizCnt: response.data.quizCnt, quizQues: response.data.quizQues, quizViews: response.data.quizViews});
